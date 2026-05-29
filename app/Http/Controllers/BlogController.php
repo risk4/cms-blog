@@ -5,39 +5,84 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\Page;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
     /**
-     * Display blog homepage with latest posts
+     * Display homepage
      */
-    public function index()
+    public function home()
     {
+        $featuredPost = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->featured()
+            ->latest('published_at')
+            ->first();
+
         $posts = Post::with(['category', 'user', 'tags'])
             ->published()
             ->latest('published_at')
-            ->paginate(12);
-
-        $featuredPosts = Post::published()
-            ->featured()
-            ->latest('published_at')
-            ->take(3)
-            ->get();
+            ->paginate(10);
 
         $categories = Category::active()
             ->withCount('posts')
             ->orderBy('order')
             ->get();
 
-        $totalPosts = Post::published()->count();
+        $tags = \App\Models\Tag::withCount('posts')
+            ->orderBy('name')
+            ->get();
 
-        return view('blog.home-v2', [
-            'title' => 'Blog',
+        $sliders = Post::with(['category'])
+            ->published()
+            ->slider()
+            ->latest('published_at')
+            ->take(5)
+            ->get();
+
+        return view('blog.home', [
+            'title' => config('app.name', 'My Blog'),
+            'featuredPosts' => $featuredPost ? collect([$featuredPost]) : collect(),
             'posts' => $posts,
-            'featuredPosts' => $featuredPosts,
             'categories' => $categories,
-            'totalPosts' => $totalPosts
+            'tags' => $tags,
+            'sliders' => $sliders
+        ]);
+    }
+
+    /**
+     * Display blog listing
+     */
+    public function index()
+    {
+        $featuredPost = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->featured()
+            ->latest('published_at')
+            ->first();
+
+        $posts = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->latest('published_at')
+            ->paginate(10);
+
+        $categories = Category::active()
+            ->withCount('posts')
+            ->orderBy('order')
+            ->get();
+
+        $tags = \App\Models\Tag::withCount('posts')
+            ->orderBy('name')
+            ->get();
+
+        return view('blog.index', [
+            'title' => config('app.name', 'My Blog') . ' - Blog',
+            'featuredPost' => $featuredPost,
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags
         ]);
     }
 
@@ -70,6 +115,41 @@ class BlogController extends Controller
     }
 
     /**
+     * Search posts
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $posts = Post::with(['category', 'user', 'tags'])
+            ->published()
+            ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('content', 'like', "%{$query}%")
+                  ->orWhere('excerpt', 'like', "%{$query}%");
+            })
+            ->latest('published_at')
+            ->paginate(12);
+
+        $categories = Category::active()
+            ->withCount('posts')
+            ->orderBy('order')
+            ->get();
+
+        $tags = \App\Models\Tag::withCount('posts')
+            ->orderBy('name')
+            ->get();
+
+        return view('blog.search', [
+            'title' => "Search: {$query} - " . config('app.name', 'My Blog'),
+            'posts' => $posts,
+            'query' => $query,
+            'categories' => $categories,
+            'tags' => $tags
+        ]);
+    }
+
+    /**
      * Display posts by category
      */
     public function category($slug)
@@ -84,10 +164,21 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
+        $categories = Category::active()
+            ->withCount('posts')
+            ->orderBy('order')
+            ->get();
+
+        $tags = \App\Models\Tag::withCount('posts')
+            ->orderBy('name')
+            ->get();
+
         return view('blog.category', [
             'title' => $category->name,
             'category' => $category,
-            'posts' => $posts
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags
         ]);
     }
 
@@ -104,10 +195,21 @@ class BlogController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
+        $categories = Category::active()
+            ->withCount('posts')
+            ->orderBy('order')
+            ->get();
+
+        $tags = \App\Models\Tag::withCount('posts')
+            ->orderBy('name')
+            ->get();
+
         return view('blog.tag', [
             'title' => 'Tag: ' . $tag->name,
             'tag' => $tag,
-            'posts' => $posts
+            'posts' => $posts,
+            'categories' => $categories,
+            'tags' => $tags
         ]);
     }
 
@@ -120,7 +222,7 @@ class BlogController extends Controller
             ->published()
             ->firstOrFail();
 
-        return view('blog.page', [
+        return view('pages.show', [
             'title' => $page->meta_title ?: $page->title,
             'page' => $page
         ]);

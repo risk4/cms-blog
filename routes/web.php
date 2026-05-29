@@ -6,17 +6,27 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\AuthController;
 
 // Public Blog Routes (Root)
-Route::get('/', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/post/{slug}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/', [BlogController::class, 'home'])->name('home');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
-Route::get('/page/{slug}', [BlogController::class, 'page'])->name('blog.page');
+
+// Authentication Routes
+Route::get('/signin', [AuthController::class, 'showSignin'])->name('login');
+Route::post('/signin', [AuthController::class, 'signin']);
+Route::get('/signup', [AuthController::class, 'showSignup'])->name('signup');
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/signout', [AuthController::class, 'signout'])->name('signout');
 
 // Admin Dashboard & CMS Routes
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -42,10 +52,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('pages.calender', ['title' => 'Calendar']);
     })->name('calendar');
 
-    // Profile pages
-    Route::get('/profile', function () {
-        return view('pages.profile', ['title' => 'Profile']);
-    })->name('profile');
+     // Profile pages
+     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+     Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+
+     // Settings
+     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
     // Form pages
     Route::get('/form-elements', function () {
@@ -76,15 +89,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('pages.chart.bar-chart', ['title' => 'Bar Chart']);
     })->name('bar-chart');
 
-    // Authentication pages
-    Route::get('/signin', function () {
-        return view('pages.auth.signin', ['title' => 'Sign In']);
-    })->name('signin');
-
-    Route::get('/signup', function () {
-        return view('pages.auth.signup', ['title' => 'Sign Up']);
-    })->name('signup');
-
     // UI Elements pages
     Route::get('/alerts', function () {
         return view('pages.ui-elements.alerts', ['title' => 'Alerts']);
@@ -110,3 +114,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return view('pages.ui-elements.videos', ['title' => 'Videos']);
     })->name('videos');
 });
+
+// Catch-all page route - must be last
+Route::get('/{slug}', [BlogController::class, 'page'])->name('blog.page');

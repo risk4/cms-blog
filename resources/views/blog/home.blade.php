@@ -2,64 +2,59 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative overflow-hidden bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 pt-20 pb-24">
-    <!-- Animated Background Pattern -->
-    <div class="absolute inset-0 opacity-30 dark:opacity-10">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
-        <div class="absolute top-0 right-1/4 w-96 h-96 bg-violet-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000"></div>
-        <div class="absolute bottom-0 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000"></div>
-    </div>
-
+<!-- Hero Slider Section -->
+<section class="relative overflow-hidden bg-gray-900 pt-20 pb-24">
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-4xl mx-auto fade-up">
-            <!-- Badge -->
-            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 mb-8">
-                <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span>
-                <span class="text-sm font-medium text-blue-700 dark:text-blue-300">Welcome to ModernCMS</span>
+        <div id="hero-slider" class="glide">
+            <div class="glide__track" data-glide-el="track">
+                <ul class="glide__slides">
+                    @foreach($sliders as $slider)
+                    <li class="glide__slide">
+                        <div class="grid md:grid-cols-2 gap-12 items-center">
+                            <div class="text-left">
+                                <h1 class="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                                    {{ $slider->title }}
+                                </h1>
+                                <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                                    {{ $slider->excerpt }}
+                                </p>
+                                <a href="{{ route('blog.show', $slider->slug) }}" class="inline-flex items-center px-8 py-4 bg-yellow-400 text-gray-900 rounded-xl font-semibold hover:bg-yellow-500 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                    Read article
+                                </a>
+                            </div>
+                            @if($slider->featured_image)
+                            <div class="relative h-96 rounded-2xl overflow-hidden">
+                                <img src="{{ asset('storage/' . $slider->featured_image) }}" alt="{{ $slider->title }}" class="w-full h-full object-cover">
+                            </div>
+                            @else
+                            <div class="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                                <svg class="w-24 h-24 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                                </svg>
+                            </div>
+                            @endif
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
             </div>
-
-            <!-- Headline -->
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-6 leading-tight tracking-tight">
-                Discover stories,
-                <span class="bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent">thinking</span>, and expertise
-            </h1>
-
-            <!-- Subheadline -->
-            <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed">
-                A place to read, write, and deepen your understanding
-            </p>
-
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-                <a href="#latest" class="inline-flex items-center px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105">
-                    Start reading
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                </a>
-                <a href="#" class="inline-flex items-center px-8 py-4 bg-white dark:bg-gray-900 text-gray-900 dark:text-white rounded-xl font-semibold border-2 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition-all duration-200">
-                    Learn more
-                </a>
-            </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ $totalPosts }}+</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Articles</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">{{ $categories->count() }}</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Categories</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2">10K+</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400">Readers</div>
-                </div>
+            <div class="glide__bullets" data-glide-el="controls[nav]">
+                @foreach($sliders as $index => $slider)
+                <button class="glide__bullet" data-glide-dir="={{ $index }}"></button>
+                @endforeach
             </div>
         </div>
     </div>
 </section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
+<script>
+    new Glide('#hero-slider', {
+        type: 'carousel',
+        perView: 1,
+        autoplay: 5000
+    }).mount();
+</script>
 
 <!-- Featured Post (Large Hero) -->
 @if($featuredPosts->count() > 0)

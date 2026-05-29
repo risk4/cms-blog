@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <div class="space-y-6">
@@ -38,14 +38,14 @@
 
             <!-- Categories Stat -->
             <div class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:shadow-md dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-orange-500/5 transition-transform group-hover:scale-150"></div>
+                <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-warning-500/5 transition-transform group-hover:scale-150"></div>
                 <div class="relative flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Categories</p>
                         <h4 class="mt-2 text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['categories_count'] }}</h4>
                         <p class="mt-2 text-xs text-gray-400">Organized content</p>
                     </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500 text-white shadow-lg shadow-orange-500/20">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-warning-500 text-white shadow-lg shadow-warning-500/20">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                         <h4 class="mt-2 text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['pages_count'] }}</h4>
                         <p class="mt-2 text-xs text-gray-400">Static information</p>
                     </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500 text-white shadow-lg shadow-purple-500/20">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-600 text-white shadow-lg shadow-purple-500/20">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                     </div>
                 </div>
@@ -68,14 +68,14 @@
 
             <!-- Media Stat -->
             <div class="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:shadow-md dark:border-gray-800 dark:bg-white/[0.03]">
-                <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-green-500/5 transition-transform group-hover:scale-150"></div>
+                <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-success-500/5 transition-transform group-hover:scale-150"></div>
                 <div class="relative flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Media Files</p>
                         <h4 class="mt-2 text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['media_count'] }}</h4>
                         <p class="mt-2 text-xs text-gray-400">Images & assets</p>
                     </div>
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500 text-white shadow-lg shadow-green-500/20">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-success-500 text-white shadow-lg shadow-success-500/20">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                     </div>
                 </div>

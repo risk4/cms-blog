@@ -24,6 +24,7 @@ class Post extends Model
         'published_at',
         'views',
         'is_featured',
+        'is_slider',
         'allow_comments',
         'meta_title',
         'meta_description',
@@ -33,6 +34,7 @@ class Post extends Model
     protected $casts = [
         'published_at' => 'datetime',
         'is_featured' => 'boolean',
+        'is_slider' => 'boolean',
         'allow_comments' => 'boolean',
     ];
 
@@ -75,6 +77,14 @@ class Post extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+
+    /**
+     * Scope a query to only include slider posts
+     */
+    public function scopeSlider($query)
+    {
+        return $query->where('is_slider', true);
     }
 
     /**

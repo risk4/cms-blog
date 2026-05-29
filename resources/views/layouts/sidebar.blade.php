@@ -1,10 +1,13 @@
 
 @php
     use App\Helpers\MenuHelper;
+    use App\Helpers\SettingHelper;
     $menuGroups = MenuHelper::getMenuGroups();
 
     // Get current path
     $currentPath = request()->path();
+    $logo = SettingHelper::get('site_logo');
+    $siteName = SettingHelper::get('site_name', config('app.name'));
 @endphp
 
 <aside id="sidebar"
@@ -58,23 +61,27 @@
     }"
     @mouseenter="if (!$store.sidebar.isExpanded) $store.sidebar.setHovered(true)"
     @mouseleave="$store.sidebar.setHovered(false)">
-    <!-- Logo Section -->
-    <div class="pt-8 pb-7 flex"
-        :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
-        'xl:justify-center' :
-        'justify-start'">
-        <a href="/admin" class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white shadow-lg shadow-brand-500/20">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" 
-                  class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                Modern<span class="text-brand-500">CMS</span>
-            </span>
-        </a>
-    </div>
+     <!-- Logo Section -->
+     <div class="pt-8 pb-7 flex"
+         :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
+         'xl:justify-center' :
+         'justify-start'">
+         <a href="/admin" class="flex items-center gap-3">
+             @if($logo)
+                 <img src="{{ Storage::url($logo) }}" alt="{{ $siteName }}" class="h-10 w-10 rounded-xl object-cover">
+             @else
+                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white shadow-lg shadow-brand-500/20">
+                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                         <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                     </svg>
+                 </div>
+             @endif
+             <span x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" 
+                   class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                 {{ Str::limit($siteName, 20) }}
+             </span>
+         </a>
+     </div>
 
     <!-- Navigation Menu -->
     <div class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
