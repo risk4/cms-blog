@@ -1,439 +1,259 @@
-# TailAdmin Laravel - Tailwind CSS Free Laravel Dashboard
+# Laravel CMS - Dokumentasi
 
-**TailAdmin Laravel** is a modern, production-ready admin dashboard template powered by **Laravel 12**, **Tailwind CSS v4**, **Alpine.js**, and a clean, modular architecture. TailAdmin is one of the most popular Tailwind CSS dashboard now also available for Larvael. It’s designed for building fast, scalable admin panels, CRM dashboards, SaaS backends, and any data-driven application where clarity and performance matter.
-![TailAdmin - Next.js Dashboard Preview](./tailadmin-laravel.png)
+## Deskripsi
+Sistem CMS (Content Management System) lengkap untuk blog dan website yang dibangun dengan Laravel 12, Tailwind CSS v4, dan Alpine.js.
 
+## Fitur CMS
 
-## Quick Links
+### 1. **Manajemen Posts (Artikel)**
+- Buat, edit, dan hapus artikel
+- Status: Draft, Published, Scheduled
+- Featured posts (artikel unggulan)
+- Upload featured image
+- Kategori dan tags
+- SEO meta tags (title, description, keywords)
+- Excerpt (ringkasan artikel)
+- View counter
+- Soft delete (artikel bisa dipulihkan)
 
-* [✨ Get TailAdmin Laravel](https://tailadmin.com/laravel)
-* [📄 Documentation](https://tailadmin.com/docs)
-* [⬇️ Download](https://tailadmin.com/download)
-* [🌐 Live Demo](https://laravel-demo.tailadmin.com)
+### 2. **Manajemen Categories (Kategori)**
+- Kategori hierarki (parent-child)
+- Aktif/non-aktif kategori
+- Urutan kategori
+- Deskripsi kategori
 
-Here’s a tighter, more search-friendly version that highlights value and avoids fluff while keeping your structure intact.
+### 3. **Manajemen Pages (Halaman)**
+- Halaman statis (About, Contact, dll)
+- Template system
+- Show/hide di menu
+- Urutan halaman
+- SEO meta tags
 
-## ✨ Key Features
+### 4. **Media Library**
+- Upload file (gambar, dokumen, video)
+- Bulk upload
+- Preview media
+- Informasi file (size, type, dll)
 
-* 🚀 **Laravel 12 Core** - Built on the latest Laravel release with improved routing, security, and Blade templating
-* 🎨 **Tailwind CSS v4** - Utility-first styling for rapid, consistent UI development
-* ⚡ **Alpine.js Interactivity** - Lightweight reactivity without a heavy JavaScript framework
-* 📦 **Vite Build System** - Fast dev server, instant HMR, and optimized production builds
-* 📱 **Fully Responsive Layouts** - Smooth, mobile-first design that adapts across all screen sizes
-* 🌙 **Built-in Dark Mode** - Ready-to-use modern dark theme for better usability and aesthetics
-* 📊 **Advanced UI Components** - Charts, data tables, forms, calendars, modals, and reusable blocks for complex dashboards
-* 🎯 **Production-Ready Dashboard UI** - Clean, modern interface crafted for real apps, not placeholder demos
+## Struktur Database
 
-### Other Versions
+### Tables:
+1. **posts** - Menyimpan artikel blog
+2. **categories** - Kategori artikel
+3. **pages** - Halaman statis
+4. **tags** - Tag artikel
+5. **post_tag** - Relasi many-to-many posts dan tags
+6. **media** - File media yang diupload
+7. **users** - User/admin
 
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [React.js Version](https://github.com/TailAdmin/free-react-tailwind-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
-- [Angular Version](https://github.com/TailAdmin/free-angular-tailwind-dashboard)
-- [Laravel Version](https://github.com/TailAdmin/tailadmin-laravel)
+## Routes CMS
 
-## 📋 Requirements
-To set up TailAdmin Laravel, make sure your environment includes:
+### Admin Routes (prefix: /admin)
+```
+GET    /admin/posts              - List semua posts
+GET    /admin/posts/create       - Form create post
+POST   /admin/posts              - Store post baru
+GET    /admin/posts/{id}         - View detail post
+GET    /admin/posts/{id}/edit    - Form edit post
+PUT    /admin/posts/{id}         - Update post
+DELETE /admin/posts/{id}         - Delete post
 
-* **PHP 8.2+**
-* **Composer** (PHP dependency manager)
-* **Node.js 18+** and **npm** (for compiling frontend assets)
-* **Database** - Works with SQLite (default), MySQL, or PostgreSQL
+GET    /admin/categories         - List semua categories
+GET    /admin/categories/create  - Form create category
+POST   /admin/categories         - Store category baru
+GET    /admin/categories/{id}/edit - Form edit category
+PUT    /admin/categories/{id}    - Update category
+DELETE /admin/categories/{id}    - Delete category
 
-### Tailwind CSS Laravel Dashboard
+GET    /admin/pages              - List semua pages
+GET    /admin/pages/create       - Form create page
+POST   /admin/pages              - Store page baru
+GET    /admin/pages/{id}         - View detail page
+GET    /admin/pages/{id}/edit    - Form edit page
+PUT    /admin/pages/{id}         - Update page
+DELETE /admin/pages/{id}         - Delete page
 
-TailAdmin delivers a refined Tailwind CSS Laravel Dashboard experience, combining Laravel’s robust backend with Tailwind’s flexible utility classes. The result is a clean, fast, and customizable dashboard that helps developers build modern admin interfaces without the usual front-end complexity. It’s ideal for teams looking for a Tailwind-powered Laravel starter that stays lightweight and easy to scale.
-
-### Laravel Admin Dashboard
-
-If you’re searching for a dependable Laravel Admin Dashboard template that’s easy to set up and ready for production, TailAdmin fits the job. It offers a polished UI, reusable components, optimized performance, and all the essentials needed to launch dashboards, CRM systems, and internal tools quickly. It gives developers a solid foundation, so projects move faster with fewer decisions to worry about.
-
-### Check Your Environment
-
-Verify your installations:
-
-```bash
-php -v
-composer -V
-node -v
-npm -v
+GET    /admin/media              - Media library
+POST   /admin/media              - Upload file
+POST   /admin/media/bulk-upload  - Bulk upload files
+DELETE /admin/media/{id}         - Delete media
 ```
 
-## 🚀 Quick Start Installation
+## Models & Relationships
 
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/TailAdmin/tailadmin-laravel.git
-cd tailadmin-laravel
+### Post Model
+```php
+- belongsTo: User, Category
+- belongsToMany: Tags
+- Scopes: published(), featured(), draft()
 ```
 
-### Step 2: Install PHP Dependencies
+### Category Model
+```php
+- belongsTo: Category (parent)
+- hasMany: Category (children), Posts
+- Scopes: active(), parent()
+```
 
+### Page Model
+```php
+- belongsTo: User
+- Scopes: published(), inMenu()
+```
+
+### Tag Model
+```php
+- belongsToMany: Posts
+```
+
+### Media Model
+```php
+- belongsTo: User
+- Attributes: url, humanFileSize
+- Methods: isImage(), isVideo(), isDocument()
+```
+
+## Instalasi
+
+### 1. Install Dependencies
 ```bash
 composer install
-```
-
-This command will install all Laravel dependencies defined in `composer.json`.
-
-### Step 3: Install Node.js Dependencies
-
-```bash
 npm install
 ```
 
-Or if you prefer yarn or pnpm:
-
-```bash
-# Using yarn
-yarn install
-
-# Using pnpm
-pnpm install
-```
-
-### Step 4: Environment Configuration
-
-Copy the example environment file:
-
+### 2. Setup Environment
 ```bash
 cp .env.example .env
-```
-
-**For Windows users:**
-
-```bash
-copy .env.example .env
-```
-
-**Or create it programmatically:**
-
-```bash
-php -r "file_exists('.env') || copy('.env.example', '.env');"
-```
-
-### Step 5: Generate Application Key
-
-```bash
 php artisan key:generate
 ```
 
-This creates a unique encryption key for your application.
-
-### Step 6: Configure Database
-
-#### Option A: Using MySQL/PostgreSQL
-
-Update your `.env` file with your database credentials:
-
-```env
+### 3. Konfigurasi Database
+Edit file `.env`:
+```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=tailadmin_db
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_DATABASE=nama_database
+DB_USERNAME=username
+DB_PASSWORD=password
 ```
 
-Create the database:
-
-```bash
-# MySQL
-mysql -u root -p -e "CREATE DATABASE tailadmin_db;"
-
-# PostgreSQL
-createdb tailadmin_db
-```
-
-Run migrations:
-
+### 4. Run Migrations
 ```bash
 php artisan migrate
 ```
 
-### Step 7: (Optional) Seed the Database
-
-If you want sample data:
-
+### 5. Seed Database (Optional)
 ```bash
 php artisan db:seed
 ```
 
-### Step 8: Storage Link
+Ini akan membuat:
+- Admin user (email: admin@example.com, password: password)
+- Sample categories
+- Sample posts
+- Sample pages
+- Sample tags
 
-Create a symbolic link for file storage:
-
+### 6. Create Storage Link
 ```bash
 php artisan storage:link
 ```
 
-## 🏃 Running the Application
-
-### Development Mode (Recommended)
-
-The easiest way to start development is using the built-in script:
-
-```bash
-composer run dev
-```
-
-This single command starts:
-- ✅ Laravel development server (http://localhost:8000)
-- ✅ Vite dev server for hot module reloading
-- ✅ Queue worker for background jobs
-- ✅ Log monitoring
-
-**Access your application at:** [http://localhost:8000](http://localhost:8000)
-
-### Manual Development Setup
-
-If you prefer to run services individually in separate terminal windows:
-
-**Terminal 1 - Laravel Server:**
-```bash
-php artisan serve
-```
-
-**Terminal 2 - Frontend Assets:**
-```bash
-npm run dev
-```
-
-### Building for Production
-
-#### Build Frontend Assets
-
+### 7. Build Assets
 ```bash
 npm run build
 ```
 
-#### Optimize Laravel
-
+### 8. Run Development Server
 ```bash
-# Clear and cache configuration
-php artisan config:cache
-
-# Cache routes
-php artisan route:cache
-
-# Cache views
-php artisan view:cache
-
-# Optimize autoloader
-composer install --optimize-autoloader --no-dev
-```
-
-#### Production Environment
-
-Update your `.env` for production:
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
-```
-
-
-## 🧪 Testing
-
-Run the test suite using Pest:
-
-```bash
-composer run test
-```
-
-Or manually:
-
-```bash
-php artisan test
-```
-
-Run with coverage:
-
-```bash
-php artisan test --coverage
-```
-
-Run specific tests:
-
-```bash
-php artisan test --filter=ExampleTest
-```
-
-## 📜 Available Commands
-
-### Composer Scripts
-
-```bash
-# Start development environment
-composer run dev
-
-# Run tests
-composer run test
-
-# Code formatting (if configured)
-composer run format
-
-# Static analysis (if configured)
-composer run analyze
-```
-
-### NPM Scripts
-
-```bash
-# Start Vite dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Lint JavaScript/TypeScript
-npm run lint
-
-# Format code
-npm run format
-```
-
-### Artisan Commands
-
-```bash
-# Start development server
 php artisan serve
-
-# Run migrations
-php artisan migrate
-
-# Rollback migrations
-php artisan migrate:rollback
-
-# Fresh migrations with seeding
-php artisan migrate:fresh --seed
-
-# Generate application key
-php artisan key:generate
-
-# Clear all caches
-php artisan optimize:clear
-
-# Cache everything for production
-php artisan optimize
-
-# Create symbolic link for storage
-php artisan storage:link
-
-# Start queue worker
-php artisan queue:work
-
-# List all routes
-php artisan route:list
-
-# Create a new controller
-php artisan make:controller YourController
-
-# Create a new model
-php artisan make:model YourModel -m
-
-# Create a new migration
-php artisan make:migration create_your_table
 ```
 
-## 📁 Project Structure
-
-```
-tailadmin-laravel/
-├── app/                    # Application logic
-│   ├── Http/              # Controllers, Middleware, Requests
-│   ├── Models/            # Eloquent models
-│   └── Providers/         # Service providers
-├── bootstrap/             # Framework bootstrap files
-├── config/                # Configuration files
-├── database/              # Migrations, seeders, factories
-│   ├── migrations/
-│   ├── seeders/
-│   └── factories/
-├── public/                # Public assets (entry point)
-│   ├── build/            # Compiled assets (generated)
-│   └── index.php         # Application entry point
-├── resources/             # Views and raw assets
-│   ├── css/              # Stylesheets (Tailwind)
-│   ├── js/               # JavaScript files (Alpine.js)
-│   └── views/            # Blade templates
-├── routes/                # Route definitions
-│   ├── web.php           # Web routes
-│   ├── api.php           # API routes
-│   └── console.php       # Console routes
-├── storage/               # Logs, cache, uploads
-│   ├── app/
-│   ├── framework/
-│   └── logs/
-├── tests/                 # Pest test files
-│   ├── Feature/
-│   └── Unit/
-├── .env.example           # Example environment file
-├── artisan                # Artisan CLI
-├── composer.json          # PHP dependencies
-├── package.json           # Node dependencies
-├── vite.config.js         # Vite configuration
-└── tailwind.config.js     # Tailwind configuration
+Atau gunakan:
+```bash
+composer run dev
 ```
 
-## 🐛 Troubleshooting
+## Akses CMS
 
-### Common Issues
+### Admin Panel
+Akses menu CMS di sidebar:
+- **Posts** - `/admin/posts`
+- **Categories** - `/admin/categories`
+- **Pages** - `/admin/pages`
+- **Media Library** - `/admin/media`
 
-#### "Class not found" errors
+### Default Admin Credentials (setelah seeding)
+- Email: `admin@example.com`
+- Password: `password`
+
+## Fitur Keamanan
+
+1. **CSRF Protection** - Semua form dilindungi CSRF token
+2. **File Upload Validation** - Validasi tipe dan ukuran file
+3. **SQL Injection Protection** - Menggunakan Eloquent ORM
+4. **XSS Protection** - Blade templating auto-escape
+5. **Soft Deletes** - Data tidak langsung terhapus permanen
+
+## Customization
+
+### Menambah Template Page Baru
+Edit controller `PageController.php` dan tambahkan template di validation rules.
+
+### Menambah Status Post Baru
+Edit migration `create_posts_table.php` dan model `Post.php`.
+
+### Menambah Field Baru
+1. Buat migration baru: `php artisan make:migration add_field_to_table`
+2. Update model fillable
+3. Update controller validation
+4. Update view form
+
+## Best Practices
+
+1. **Slug Generation** - Slug otomatis dibuat dari title jika tidak diisi
+2. **Published Date** - Otomatis set saat status = published
+3. **Image Upload** - Simpan di `storage/app/public/posts` atau `storage/app/public/media`
+4. **SEO** - Selalu isi meta title, description, dan keywords
+5. **Categories** - Gunakan kategori parent untuk organisasi yang lebih baik
+
+## Troubleshooting
+
+### Error: Class not found
 ```bash
 composer dump-autoload
 ```
 
-#### Permission errors on storage/bootstrap/cache
+### Error: Permission denied (storage)
 ```bash
 chmod -R 775 storage bootstrap/cache
 ```
 
-#### NPM build errors
+### Error: Storage link not working
+```bash
+php artisan storage:link
+```
+
+### Error: NPM build failed
 ```bash
 rm -rf node_modules package-lock.json
 npm install
+npm run build
 ```
 
-#### Clear all caches
-```bash
-php artisan optimize:clear
-```
+## Tech Stack
 
-#### Database connection errors
-- Check `.env` database credentials
-- Ensure database server is running
-- Verify database exists
+- **Backend**: Laravel 12
+- **Frontend**: Tailwind CSS v4, Alpine.js
+- **Database**: MySQL/PostgreSQL/SQLite
+- **Build Tool**: Vite
+- **Template Engine**: Blade
 
-## 🔄 Update Log
+## Lisensi
 
-### [2026-05-23]
+Mengikuti lisensi Laravel dan TailAdmin template.
 
-- Added **AI Settings** page to configure models, keys, and token limits.
-- Added **Maps** page with MapLibre GL, Leaflet, and iframe styles.
-- Added **Vector Maps** page powered by AmCharts 5 geodata (World & USA).
-- Added **Radar Charts** page with 3 unique formats.
-- Added **Radial Progress Charts** page featuring 4 custom layout templates.
-- Introduced new **Bar Charts Five & Six** and **Pie Charts Four & Five**.
+## Support
 
-### [April 28, 2026]
-- Added **AI Dashboard** with token usage and revenue tracking.
-- Added **Sales Dashboard** with retention and multi-channel analytics.
-- Added **Finance Dashboard** with cashflow and balance management.
-- Introduced **6 New Layout variations** for improved UI flexibility.
-- Integrated **Advanced Data Visualization** with 7+ new chart types.
-
-### [2026-03-15]
-- Fixed PHP 8.5 deprecation warning
-
-### [2025-12-29]
-- Added Date Picker in Statistics Chart
-
-## License
-
-Refer to our [LICENSE](https://tailadmin.com/license) page for more information.
+Untuk pertanyaan dan dukungan, silakan buka issue di repository atau hubungi tim development.
