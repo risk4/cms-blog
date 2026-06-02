@@ -8,9 +8,10 @@
 @section('og_type', 'article')
 
 @section('content')
-    <article class="py-12 sm:py-20">
+    <article class="bg-gray-50 py-12 dark:bg-gray-900 sm:py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <!-- Post Header -->
-        <header class="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        <header class="mx-auto max-w-4xl text-center">
             <div class="flex items-center justify-center gap-3 text-sm font-medium text-brand-500">
                 @if($post->category)
                     <a href="{{ route('blog.category', $post->category->slug) }}" class="hover:underline">
@@ -42,7 +43,7 @@
 
         <!-- Featured Image -->
         @if($post->featured_image)
-        <div class="mx-auto mt-12 max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto mt-12 max-w-5xl">
             <div class="overflow-hidden rounded-2xl shadow-xl">
                 <img src="{{ Storage::url($post->featured_image) }}" 
                      alt="{{ $post->title }}"
@@ -52,9 +53,11 @@
         @endif
 
         <!-- Content -->
-        <div class="mx-auto mt-12 max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div class="prose prose-lg prose-brand dark:prose-invert max-w-none">
-                {!! $post->content !!}
+        <div class="mx-auto mt-12 max-w-4xl">
+            <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700 sm:p-8 lg:p-10">
+                <div class="prose prose-lg prose-brand dark:prose-invert max-w-none prose-p:leading-8 prose-img:rounded-xl">
+                    {!! $post->content !!}
+                </div>
             </div>
 
             <!-- Tags -->
@@ -87,6 +90,7 @@
                     </a>
                 </div>
             </div>
+        </div>
         </div>
 
         <!-- Related Posts -->

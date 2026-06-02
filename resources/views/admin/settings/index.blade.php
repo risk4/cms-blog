@@ -25,6 +25,11 @@
                     class="whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium">
                 Hero Slider
             </button>
+            <button type="button" @click="activeTab = 'contact'"
+                    :class="{'border-brand-500 text-brand-600 dark:border-brand-400 dark:text-brand-400': activeTab === 'contact', 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-300': activeTab !== 'contact'}"
+                    class="whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium">
+                Contact
+            </button>
         </nav>
     </div>
 
@@ -424,6 +429,84 @@
             </div>
             <div class="xl:col-span-1">
                 <!-- Empty column for layout consistency if needed -->
+            </div>
+        </div>
+
+        <!-- Contact Settings Tab Content -->
+        <div x-show="activeTab === 'contact'" class="grid grid-cols-1 gap-6">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                <div class="mb-6 flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
+                        <svg class="h-5 w-5 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Contact Settings</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Configure contact page information</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <!-- Contact Email -->
+                    <div>
+                        <label for="contact_email" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Contact Email <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" 
+                               class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500" 
+                               id="contact_email" name="contact_email" 
+                               value="{{ old('contact_email', setting('contact_email', 'info@example.com')) }}" 
+                               placeholder="info@example.com" required>
+                    </div>
+
+                    <!-- Contact Phone -->
+                    <div>
+                        <label for="contact_phone" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Contact Phone
+                        </label>
+                        <input type="text" 
+                               class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500" 
+                               id="contact_phone" name="contact_phone" 
+                               value="{{ old('contact_phone', setting('contact_phone')) }}" 
+                               placeholder="+62 812 3456 7890">
+                    </div>
+
+                    <!-- Contact Address -->
+                    <div class="md:col-span-2">
+                        <label for="contact_address" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Address
+                        </label>
+                        <textarea class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500" 
+                                  id="contact_address" name="contact_address" rows="3" 
+                                  placeholder="Enter your office address">{{ old('contact_address', setting('contact_address')) }}</textarea>
+                    </div>
+
+                    <!-- Google Maps Embed URL -->
+                    <div class="md:col-span-2">
+                        <label for="contact_maps_embed" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Google Maps Embed URL
+                        </label>
+                        <input type="url" 
+                               class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500" 
+                               id="contact_maps_embed" name="contact_maps_embed" 
+                               value="{{ old('contact_maps_embed', setting('contact_maps_embed')) }}" 
+                               placeholder="https://www.google.com/maps/embed?pb=...">
+                        <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">
+                            Get embed URL from Google Maps → Share → Embed a map
+                        </p>
+                    </div>
+
+                    <!-- Working Hours -->
+                    <div class="md:col-span-2">
+                        <label for="contact_hours" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Working Hours
+                        </label>
+                        <textarea class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500" 
+                                  id="contact_hours" name="contact_hours" rows="3" 
+                                  placeholder="Monday - Friday: 9:00 AM - 5:00 PM">{{ old('contact_hours', setting('contact_hours')) }}</textarea>
+                    </div>
+                </div>
             </div>
         </div>
 

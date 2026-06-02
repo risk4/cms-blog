@@ -17,6 +17,7 @@ Route::get('/blog/search', [BlogController::class, 'search'])->name('blog.search
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/category/{slug}', [BlogController::class, 'category'])->name('blog.category');
 Route::get('/tag/{slug}', [BlogController::class, 'tag'])->name('blog.tag');
+Route::get('/contact', [BlogController::class, 'contact'])->name('blog.contact');
 
 // Authentication Routes
 Route::get('/signin', [AuthController::class, 'showSignin'])->name('login');

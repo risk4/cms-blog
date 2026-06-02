@@ -36,6 +36,11 @@ class SettingController extends Controller
             'site_logo' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg,webp|max:2048',
             'site_favicon' => 'nullable|image|mimes:png,ico|max:1024',
             'posts_per_page' => 'required|integer|min:1|max:50',
+            'contact_email' => 'required|email|max:255',
+            'contact_phone' => 'nullable|string|max:20',
+            'contact_address' => 'nullable|string|max:500',
+            'contact_maps_embed' => 'nullable|url|max:500',
+            'contact_hours' => 'nullable|string|max:500',
             // Slider settings validation
             'slider_1_image' => 'nullable|image|mimes:png,jpg,jpeg,gif,svg,webp|max:2048',
             'slider_1_title' => 'nullable|string|max:255',
@@ -145,6 +150,12 @@ class SettingController extends Controller
             'site_description' => 'A modern content management system',
             'site_keywords' => 'cms, blog, laravel',
             'posts_per_page' => '10',
+            // Contact defaults
+            'contact_email' => 'info@example.com',
+            'contact_phone' => '+62 812 3456 7890',
+            'contact_address' => '123 Main Street, City, Country',
+            'contact_maps_embed' => '',
+            'contact_hours' => 'Monday - Friday: 9:00 AM - 5:00 PM',
             // Slider defaults
             'slider_1_image' => '',
             'slider_1_title' => 'Discover stories, thinking, and expertise',

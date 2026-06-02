@@ -18,12 +18,12 @@
     </section>
 
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-12 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
             <!-- Main Content -->
-            <div class="lg:col-span-2">
+            <div class="min-w-0 lg:col-span-8">
                 @if($featuredPost)
                 <!-- Featured Post -->
-                <article class="group mb-12 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                    <article class="group mb-10 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
                     <a href="{{ route('blog.show', $featuredPost->slug) }}">
                         @if($featuredPost->featured_image)
                             <div class="aspect-[2/1] overflow-hidden">
@@ -73,20 +73,26 @@
                 @endif
 
                 @if($posts->count() > 0)
-                <div class="space-y-8">
+                <div class="space-y-12 lg:space-y-16">
                     @foreach($posts as $post)
-                    <article class="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
-                        <div class="sm:flex">
+                    <article class="group mb-8 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                        <div class="md:flex">
                             @if($post->featured_image)
-                            <div class="sm:w-80 sm:flex-shrink-0">
-                                <a href="{{ route('blog.show', $post->slug) }}">
+                            <div class="overflow-hidden md:w-72 md:flex-shrink-0 lg:w-80">
+                                <a href="{{ route('blog.show', $post->slug) }}" class="block h-full">
                                     <img src="{{ Storage::url($post->featured_image) }}" 
                                          alt="{{ $post->title }}"
-                                         class="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105 sm:h-full sm:w-80">
+                                         class="h-56 w-full object-cover transition-transform duration-300 group-hover:scale-105 md:h-full">
                                 </a>
                             </div>
+                            @else
+                            <div class="flex h-56 items-center justify-center bg-gradient-to-br from-brand-500 to-purple-600 md:w-72 md:flex-shrink-0 lg:w-80">
+                                <svg class="h-14 w-14 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                                </svg>
+                            </div>
                             @endif
-                            <div class="flex flex-1 flex-col justify-center p-6">
+                            <div class="flex min-w-0 flex-1 flex-col justify-center p-6 lg:p-8">
                                 <div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                                     @if($post->category)
                                         <a href="{{ route('blog.category', $post->category->slug) }}" 
@@ -96,13 +102,13 @@
                                     @endif
                                     <span>{{ $post->published_at?->format('M d, Y') }}</span>
                                 </div>
-                                <h2 class="mt-2 text-xl font-bold text-gray-900 dark:text-white">
+                                <h2 class="mt-3 text-xl font-bold leading-tight text-gray-900 dark:text-white sm:text-2xl">
                                     <a href="{{ route('blog.show', $post->slug) }}" class="hover:text-brand-500 transition-colors">
                                         {{ $post->title }}
                                     </a>
                                 </h2>
-                                <p class="mt-2 line-clamp-2 text-gray-600 dark:text-gray-400">
-                                    {{ Str::limit(strip_tags($post->content), 150) }}
+                                <p class="mt-3 line-clamp-3 text-base leading-7 text-gray-600 dark:text-gray-400">
+                                    {{ Str::limit(strip_tags($post->content), 220) }}
                                 </p>
                                 
                                 @if($post->tags->count() > 0)
@@ -144,7 +150,7 @@
             </div>
 
             <!-- Sidebar -->
-            <aside class="space-y-8">
+            <aside class="space-y-8 lg:col-span-4 lg:sticky lg:top-6 lg:self-start">
                 <!-- Search -->
                 <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Search</h3>

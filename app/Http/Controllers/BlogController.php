@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Page;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -24,7 +25,7 @@ class BlogController extends Controller
         $posts = Post::with(['category', 'user', 'tags'])
             ->published()
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate(5);
 
         $categories = Category::active()
             ->withCount('posts')
@@ -66,7 +67,7 @@ class BlogController extends Controller
         $posts = Post::with(['category', 'user', 'tags'])
             ->published()
             ->latest('published_at')
-            ->paginate(10);
+            ->paginate(5);
 
         $categories = Category::active()
             ->withCount('posts')
@@ -216,6 +217,20 @@ class BlogController extends Controller
     /**
      * Display static page
      */
+    public function contact()
+    {
+        return view('blog.contact', [
+            'title' => 'Contact - ' . config('app.name', 'My Blog'),
+            'contact' => [
+                'email' => Setting::getValue('contact_email', 'info@example.com'),
+                'phone' => Setting::getValue('contact_phone', '+62 812 3456 7890'),
+                'address' => Setting::getValue('contact_address', '123 Main Street, City, Country'),
+                'maps_embed' => Setting::getValue('contact_maps_embed', ''),
+                'hours' => Setting::getValue('contact_hours', 'Monday - Friday: 9:00 AM - 5:00 PM'),
+            ],
+        ]);
+    }
+
     public function page($slug)
     {
         $page = Page::where('slug', $slug)
