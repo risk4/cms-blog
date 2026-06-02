@@ -161,9 +161,9 @@ class DatabaseSeeder extends Seeder
         // Create sample pages
         $pages = [
             [
-                'title' => 'About Us',
-                'slug' => 'about-us',
-                'content' => '<h1>About Us</h1><p>Welcome to our website. We are dedicated to providing quality content and services to our visitors.</p>',
+                'title' => 'About',
+                'slug' => 'about',
+                'content' => '<h1>About Us</h1><p>Welcome to our blog. We are dedicated to providing quality content and insights on various topics including technology, business, lifestyle, and travel.</p><p>Our team of experienced writers and contributors work hard to bring you the latest news, trends, and in-depth analysis.</p>',
                 'template' => 'default',
                 'user_id' => $admin->id,
                 'status' => 'published',
