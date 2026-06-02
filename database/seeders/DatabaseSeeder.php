@@ -9,6 +9,8 @@ use App\Models\Page;
 use App\Models\Tag;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,13 +19,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password'),
-        ]);
+        // Reuse an existing user if available, otherwise create a safe admin record
+        // that matches the existing database schema.
+        $admin = User::first();
+
+        if (!$admin) {
+            $adminId = DB::table('users')->insertGetId([
+                'role_id' => 1,
+                'name' => 'Admin User',
+                'username' => 'admin',
+                'email' => 'admin@example.com',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'is_active' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $admin = User::find($adminId);
+        }
 
         // Create categories
         $categories = [
@@ -58,15 +72,16 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            Category::create($category);
+            Category::firstOrCreate(['slug' => $category['slug']], $category);
         }
 
         // Create tags
         $tags = ['Laravel', 'PHP', 'JavaScript', 'Web Development', 'Tutorial', 'News', 'Guide'];
         foreach ($tags as $tagName) {
-            Tag::create([
-                'name' => $tagName,
+            Tag::firstOrCreate([
                 'slug' => Str::slug($tagName),
+            ], [
+                'name' => $tagName,
             ]);
         }
 
@@ -82,6 +97,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'published',
                 'published_at' => now(),
                 'is_featured' => true,
+                'is_slider' => true,
                 'views' => 150,
             ],
             [
@@ -94,6 +110,7 @@ class DatabaseSeeder extends Seeder
                 'status' => 'published',
                 'published_at' => now()->subDays(1),
                 'is_featured' => true,
+                'is_slider' => true,
                 'views' => 89,
             ],
             [
@@ -105,6 +122,7 @@ class DatabaseSeeder extends Seeder
                 'user_id' => $admin->id,
                 'status' => 'published',
                 'published_at' => now()->subDays(2),
+                'is_slider' => true,
                 'views' => 67,
             ],
             [
@@ -132,10 +150,12 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($posts as $postData) {
-            $post = Post::create($postData);
-            
-            // Attach random tags to posts
-            $post->tags()->attach(Tag::inRandomOrder()->limit(rand(2, 4))->pluck('id'));
+            $post = Post::firstOrCreate(['slug' => $postData['slug']], $postData);
+
+            // Attach random tags to posts if none are attached yet
+            if ($post->tags()->count() === 0) {
+                $post->tags()->attach(Tag::inRandomOrder()->limit(rand(2, 4))->pluck('id'));
+            }
         }
 
         // Create sample pages
@@ -176,7 +196,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($pages as $page) {
-            Page::create($page);
+            Page::firstOrCreate(['slug' => $page['slug']], $page);
         }
 
         $this->command->info('Database seeded successfully!');
