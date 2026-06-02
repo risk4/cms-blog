@@ -24,19 +24,12 @@ class DatabaseSeeder extends Seeder
         $admin = User::first();
 
         if (!$admin) {
-            $adminId = DB::table('users')->insertGetId([
-                'role_id' => 1,
+            $admin = User::create([
                 'name' => 'Admin User',
-                'username' => 'admin',
                 'email' => 'admin@example.com',
                 'email_verified_at' => now(),
                 'password' => Hash::make('password'),
-                'is_active' => true,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
-
-            $admin = User::find($adminId);
         }
 
         // Create categories

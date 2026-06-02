@@ -15,6 +15,7 @@ return new class extends Migration
             Schema::create('settings', function (Blueprint $table) {
                 $table->id();
                 $table->string('key')->unique();
+                $table->string('label')->nullable();
                 $table->text('value')->nullable();
                 $table->string('type')->default('text'); // text, image, textarea
                 $table->string('group')->default('general'); // general, appearance, etc.
